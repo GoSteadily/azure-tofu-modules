@@ -4,6 +4,7 @@
 
 ## Current Modules
 
+- [`db`](./db)
 - [`network`](./network)
 - [`vm`](./vm)
 
@@ -11,3 +12,4 @@
 
 - [Module Blocks](https://opentofu.org/docs/language/modules/syntax/)
 - [Module Sources](https://opentofu.org/docs/language/modules/sources/)
+- [The `lifecycle` Meta-Argument](https://opentofu.org/docs/language/meta-arguments/lifecycle/)

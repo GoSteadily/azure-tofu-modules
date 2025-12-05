@@ -15,7 +15,7 @@ module "vm" {
 }
 ```
 
-See the [outputs](../network/outputs.tf) of the `network` module.
+See the [optional inputs](./variables.tf) to override their defaults.
 
 ## Outputs
 

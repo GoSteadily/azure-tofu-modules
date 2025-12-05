@@ -29,6 +29,10 @@ variable "vm_size" {
   type        = string
 }
 
+
+# Optional Inputs
+
+
 variable "admin_username" {
   description = "The username for the administrator."
   type        = string
