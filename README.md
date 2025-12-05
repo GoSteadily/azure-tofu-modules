@@ -1,10 +1,11 @@
 # Azure OpenTofu Modules
 
-Reusable [OpenTofu](https://opentofu.org/) modules to use across all our [Azure](https://azure.microsoft.com/)-based projects.
+[OpenTofu](https://opentofu.org/) modules to reuse across all our [Azure](https://azure.microsoft.com/)-based projects.
 
 ## Current Modules
 
 - [`network`](./network)
+- [`vm`](./vm)
 
 ## Documentation
 
