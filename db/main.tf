@@ -41,6 +41,22 @@ resource "azurerm_postgresql_flexible_server_firewall_rule" "azure" {
   end_ip_address   = "0.0.0.0"
 }
 
+resource "azurerm_postgresql_flexible_server_firewall_rule" "user" {
+  for_each = var.firewall_rules
+
+  name             = each.key
+  server_id        = azurerm_postgresql_flexible_server.this.id
+  start_ip_address = each.value.start_ip_address
+  end_ip_address   = each.value.end_ip_address
+
+  lifecycle {
+    ignore_changes = [
+      start_ip_address,
+      end_ip_address
+    ]
+  }
+}
+
 locals {
   pgbouncer = {
     "pgbouncer.enabled"             = "true"

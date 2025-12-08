@@ -17,6 +17,34 @@ module "db" {
 
 See the [optional inputs](./variables.tf) to override their defaults.
 
+
+### Firewall rules
+
+To set the firewall rules you can do the following:
+
+```tf
+module "db" {
+  # ...
+
+  firewall_rules = {
+    home = {
+      start_ip_address = "127.0.0.1"
+      end_ip_address   = "127.0.0.1"
+    }
+
+    work = {
+      start_ip_address = "127.0.0.2"
+      end_ip_address   = "127.0.0.2"
+    }
+
+    # ...
+  }
+}
+```
+
+You're allowed to change your firewall rules manually in Azure and OpenTofu won't say your state has drifted.
+
+
 ## Outputs
 
 ```tf

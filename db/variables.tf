@@ -37,6 +37,15 @@ variable "backup_retention_days" {
   default     = 7
 }
 
+variable "firewall_rules" {
+  description = "The IP addresses that are allowed to connect to the database server."
+  type = map(object({
+    start_ip_address = string
+    end_ip_address   = string
+  }))
+  default = {}
+}
+
 variable "server_version" {
   description = "The version of the database server."
   type        = string
