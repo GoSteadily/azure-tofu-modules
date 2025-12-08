@@ -31,6 +31,12 @@ variable "allow_azure_to_choose_zone" {
   default     = false
 }
 
+variable "zone" {
+  description = "The availability zone to use for the database server."
+  type        = number
+  default     = 1
+}
+
 variable "backup_retention_days" {
   description = "The backup retention days for the database server."
   type        = number

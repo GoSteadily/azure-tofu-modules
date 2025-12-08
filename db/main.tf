@@ -14,7 +14,7 @@ resource "azurerm_postgresql_flexible_server" "this" {
 
   backup_retention_days = var.backup_retention_days
   sku_name              = var.use_general ? var.general_sku_name : var.burstable_sku_name
-  zone                  = var.allow_azure_to_choose_zone ? null : "1"
+  zone                  = var.allow_azure_to_choose_zone ? null : var.zone
 }
 
 resource "azurerm_postgresql_flexible_server_database" "this" {
