@@ -57,20 +57,6 @@ resource "azurerm_postgresql_flexible_server_firewall_rule" "user" {
   }
 }
 
-locals {
-  pgbouncer = {
-    "pgbouncer.enabled"             = "true"
-    "metrics.pgbouncer_diagnostics" = "on"
-  }
-
-  pgbouncer_config = {
-    #
-    # N.B. It's slightly less than 50 since Azure uses some connections
-    #
-    "pgbouncer.default_pool_size" = var.pgbouncer_default_pool_size
-  }
-}
-
 check "pgbouncer_availability_check" {
   assert {
     condition     = !var.use_pgbouncer || (var.use_pgbouncer && var.use_general)
@@ -78,20 +64,21 @@ check "pgbouncer_availability_check" {
   }
 }
 
-resource "azurerm_postgresql_flexible_server_configuration" "pgbouncer" {
-  for_each = var.use_pgbouncer ? local.pgbouncer : {}
-  name     = each.key
-  value    = each.value
+locals {
+  default_pgbouncer_config = {
+    "metrics.pgbouncer_diagnostics" = "on"
 
-  server_id = azurerm_postgresql_flexible_server.this.id
+    #
+    # N.B. It's slightly less than 50 since Azure uses some connections
+    #
+    "pgbouncer.default_pool_size" = "45"
+  }
+
+  pgbouncer_config = var.use_pgbouncer ? merge(local.default_pgbouncer_config, var.extra_pgbouncer_config, { "pgbouncer.enabled" = true }) : {}
 }
 
-resource "azurerm_postgresql_flexible_server_configuration" "pgbouncer-config" {
-  # pgbouncer.enabled must be set to true before
-  # we can set any of the pgbouncer configurations
-  depends_on = [azurerm_postgresql_flexible_server_configuration.pgbouncer]
-
-  for_each = var.use_pgbouncer ? local.pgbouncer_config : {}
+resource "azurerm_postgresql_flexible_server_configuration" "pgbouncer" {
+  for_each = local.pgbouncer_config
   name     = each.key
   value    = each.value
 

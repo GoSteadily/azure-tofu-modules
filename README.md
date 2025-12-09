@@ -13,3 +13,7 @@
 - [Module Blocks](https://opentofu.org/docs/language/modules/syntax/)
 - [Module Sources](https://opentofu.org/docs/language/modules/sources/)
 - [The `lifecycle` Meta-Argument](https://opentofu.org/docs/language/meta-arguments/lifecycle/)
+- Providers
+  - [hashicorp/azurerm](https://registry.terraform.io/providers/hashicorp/azurerm/latest)
+  - [hashicorp/random](https://registry.terraform.io/providers/hashicorp/random/latest)
+  - [hashicorp/tls](https://registry.terraform.io/providers/hashicorp/tls/latest)

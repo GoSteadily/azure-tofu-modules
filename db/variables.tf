@@ -81,14 +81,18 @@ variable "burstable_sku_name" {
 }
 
 
+#
+# PgBouncer
+#
+
 variable "use_pgbouncer" {
   description = "Determines whether or not to use PGBouncer."
   type        = bool
   default     = false
 }
 
-variable "pgbouncer_default_pool_size" {
-  description = "PgBouncer's default pool size."
-  type        = number
-  default     = 45
+variable "extra_pgbouncer_config" {
+  description = "Extra configuration to set for PgBouncer."
+  type        = map(string)
+  default     = {}
 }

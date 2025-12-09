@@ -17,7 +17,6 @@ module "db" {
 
 See the [optional inputs](./variables.tf) to override their defaults.
 
-
 ### Firewall rules
 
 To set the firewall rules you can do the following:
@@ -44,6 +43,20 @@ module "db" {
 
 You're allowed to change your firewall rules manually in Azure and OpenTofu won't say your state has drifted.
 
+### PgBouncer
+
+You can enable PgBouncer and configure it as follows:
+
+```tf
+module "db" {
+  # ...
+
+  use_pgbouncer = true
+  extra_pgbouncer_config = {
+    "pgbouncer.max_prepared_statements" = "10"
+  }
+}
+```
 
 ## Outputs
 
