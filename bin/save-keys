@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+#
+# Save the public and private keys of a given node to separate files.
+#
+# Usage:
+#   save-keys node
+#
+# Args:
+#
+#   node  A non-negative integer, 0-3 inclusive
+#
+# Examples:
+#
+#   save-keys 0
+#   save-keys 1
+#   save-keys 2
+#   save-keys 3
+#
+
+set -euo pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source "$script_dir/lib.sh"
+
+# ARGS
+
+node="${1:?}"
+
+# MAIN
+
+public_key="$(get_public_key "$node")"
+private_key="$(get_private_key "$node")"
+
+workspace="$(t workspace show)"
+public_key_file="$project_root/$workspace-public-$node.key"
+private_key_file="$project_root/$workspace-private-$node.key"
+
+## Step 1: Save the public key to a file
+echo "$public_key" > "$public_key_file"
+
+## Step 2: Save the private key to a file
+touch "$private_key_file"
+chmod 600 "$private_key_file"
+echo "$private_key" > "$private_key_file"

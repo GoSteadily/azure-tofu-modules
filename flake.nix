@@ -16,5 +16,7 @@
             export PS1="($name) $PS1"
           '';
         };
+
+        packages.default = pkgs.callPackage ./nix/scripts.nix {};
       });
 }
