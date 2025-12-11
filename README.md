@@ -8,6 +8,10 @@
 - [`network`](./network)
 - [`vm`](./vm)
 
+## Useful Scripts
+
+There are a number of [scripts](./bin) that are useful to have when working on the infrastructure. They are made available as the default package from `flake.nix`.
+
 ## Documentation
 
 - [Module Blocks](https://opentofu.org/docs/language/modules/syntax/)
