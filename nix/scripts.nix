@@ -27,6 +27,7 @@ stdenv.mkDerivation {
     install -m755 save-keys "$out/bin/unwrapped-save-keys"
     install -m755 with-pg-env "$out/bin/unwrapped-with-pg-env"
     install -m755 recreate-vm "$out/bin/unwrapped-recreate-vm"
+    install -m755 login "$out/bin/unwrapped-login"
 
     makeWrapper "$out/bin/unwrapped-save-keys" "$out/bin/save-keys" \
       --prefix PATH : ${lib.makeBinPath commonPackages}
@@ -35,6 +36,9 @@ stdenv.mkDerivation {
       --prefix PATH : ${lib.makeBinPath commonPackages}
 
     makeWrapper "$out/bin/unwrapped-recreate-vm" "$out/bin/recreate-vm" \
+      --prefix PATH : ${lib.makeBinPath commonPackages}
+
+    makeWrapper "$out/bin/unwrapped-login" "$out/bin/login" \
       --prefix PATH : ${lib.makeBinPath commonPackages}
   '';
 }

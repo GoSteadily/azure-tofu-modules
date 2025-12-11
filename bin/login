@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+#
+# Usage:
+#   login [-n node] [-u user] [-i identity]
+#
+# Options:
+#
+#   -n node          A non-negative integer, typically 0-3 inclusive, defaults to 0
+#   -u user          The user to login as, defaults to azureuser
+#   -i identityFile  A path to a file containing a private key for the given user
+#
+# Examples:
+#
+#   login
+#   login -u root -i ~/.ssh/private_key
+#
+
+set -euo pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source "$script_dir/lib.sh"
+
+# OPTIONS
+
+node=0
+user="azureuser"
+identity_file=""
+
+while getopts ":n:u:i:" opt; do
+  case "$opt" in
+    n)
+      node="$OPTARG"
+      ;;
+    u)
+      user="$OPTARG"
+      ;;
+    i)
+      identity_file="$OPTARG"
+      ;;
+    :)
+      fail "Option -%s requires an argument" "$OPTARG"
+      ;;
+    \?)
+      fail "Invalid option: -%s" "$OPTARG"
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+# MAIN
+
+host="$(get_host "$node")"
+
+if [[ -z "$identity_file" ]]; then
+  private_key="$(get_private_key "$node")"
+
+  identity_file="$(mktemp)"
+  chmod 600 "$identity_file"
+  echo "$private_key" > "$identity_file"
+
+  ssh -i "$identity_file" -o IdentitiesOnly=yes "$user@$host"
+
+  rm -f "$identity_file"
+else
+  ssh -i "$identity_file" -o IdentitiesOnly=yes "$user@$host"
+fi
