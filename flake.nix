@@ -1,6 +1,6 @@
 {
   outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem(system:
+    (flake-utils.lib.eachDefaultSystem(system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
       in
@@ -18,5 +18,13 @@
         };
 
         packages.default = pkgs.callPackage ./nix/scripts.nix {};
-      });
+      })
+    ) // {
+      templates = {
+        default = {
+          description = "A template for getting started on a new Azure-based project.";
+          path = ./templates/default;
+        };
+      };
+    };
 }

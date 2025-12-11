@@ -1,0 +1,9 @@
+/result
+
+.terraform/
+
+*.backup
+*.key
+
+.bashrc
+.envrc
