@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+#
+# Usage:
+#   recreate-vm [-n node] -- [options-for-tofu-apply]
+#
+# Options:
+#
+#   -n node  A non-negative integer, typically 0-3 inclusive, defaults to 0
+#
+# Examples:
+#
+#   recreate-vm
+#   recreate-vm -n 1
+#   recreate-vm -- --auto-approve
+#   recreate-vm -n 2 -- --auto-approve
+#
+
+set -euo pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source "$script_dir/lib.sh"
+
+# OPTIONS
+
+node=0
+
+while getopts ":n:" opt; do
+  case "$opt" in
+    n)
+      node="$OPTARG"
+      ;;
+    :)
+      fail "Option -%s requires an argument" "$OPTARG"
+      ;;
+    \?)
+      fail "Invalid option: -%s" "$OPTARG"
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+# MAIN
+
+t apply -replace="module.vm[$node].azurerm_linux_virtual_machine.this" "$@"
