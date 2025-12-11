@@ -1,6 +1,8 @@
 { lib, makeWrapper, stdenv
 
 , jq, opentofu
+
+, withPrefix ? "atm"
 }:
 
 stdenv.mkDerivation {
@@ -19,26 +21,34 @@ stdenv.mkDerivation {
         jq
         opentofu
       ];
+
+      isEmpty = s: s == null || (builtins.isString s && s == "");
+      prefix = s: if isEmpty withPrefix then s else withPrefix + "-" + s;
     in
     ''
     mkdir -p "$out/bin"
 
     install -m644 lib.sh "$out/bin/lib.sh"
+
+    install -m755 install-nixos "$out/bin/unwrapped-install-nixos"
+    install -m755 login "$out/bin/unwrapped-login"
+    install -m755 recreate-vm "$out/bin/unwrapped-recreate-vm"
     install -m755 save-keys "$out/bin/unwrapped-save-keys"
     install -m755 with-pg-env "$out/bin/unwrapped-with-pg-env"
-    install -m755 recreate-vm "$out/bin/unwrapped-recreate-vm"
-    install -m755 login "$out/bin/unwrapped-login"
 
-    makeWrapper "$out/bin/unwrapped-save-keys" "$out/bin/save-keys" \
+    makeWrapper "$out/bin/unwrapped-install-nixos" "$out/bin/${prefix "install-nixos"}" \
       --prefix PATH : ${lib.makeBinPath commonPackages}
 
-    makeWrapper "$out/bin/unwrapped-with-pg-env" "$out/bin/with-pg-env" \
+    makeWrapper "$out/bin/unwrapped-login" "$out/bin/${prefix "login"}" \
       --prefix PATH : ${lib.makeBinPath commonPackages}
 
-    makeWrapper "$out/bin/unwrapped-recreate-vm" "$out/bin/recreate-vm" \
+    makeWrapper "$out/bin/unwrapped-recreate-vm" "$out/bin/${prefix "recreate-vm"}" \
       --prefix PATH : ${lib.makeBinPath commonPackages}
 
-    makeWrapper "$out/bin/unwrapped-login" "$out/bin/login" \
+    makeWrapper "$out/bin/unwrapped-save-keys" "$out/bin/${prefix "save-keys"}" \
+      --prefix PATH : ${lib.makeBinPath commonPackages}
+
+    makeWrapper "$out/bin/unwrapped-with-pg-env" "$out/bin/${prefix "with-pg-env"}" \
       --prefix PATH : ${lib.makeBinPath commonPackages}
   '';
 }

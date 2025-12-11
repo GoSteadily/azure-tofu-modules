@@ -6,9 +6,11 @@ Useful utilities for managing the infrastructure.
 
 - `ATM_PROJECT_ROOT` - The root directory of your current project.
 - `ATM_WORKING_DIR` - The directory that contains your root module. It defaults to `ATM_PROJECT_ROOT/root`.
+- `ATM_PROVISION_DIR` - The directory that contains the Nix configuration for provisioning your virtual machines. It defaults to `ATM_PROJECT_ROOT/provision`.
 
 ## Utilities
 
+- [`install-nixos`](./bin/install-nixos) - Install NixOS, using [nixos-anywhere](https://github.com/nix-community/nixos-anywhere), on a given virtual machine.
 - [`login`](./bin/login) - Login via SSH to a given virtual machine.
 - [`recreate-vm`](./bin/recreate-vm) - Destroy and recreate a given virtual machine.
 - [`save-keys node`](./bin/save-keys) - Save the public and private keys of a given node to separate files.
@@ -42,4 +44,10 @@ Here's how to access the scripts in your development environment:
       }
     );
 }
+```
+
+By default, the scripts would be prefixed with `atm`. You can change the prefix as follows:
+
+```nix
+azure-tofu-modules.packages.${system}.default.override { withPrefix = "custom-prefix"; }
 ```

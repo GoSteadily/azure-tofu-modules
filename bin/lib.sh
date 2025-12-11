@@ -4,6 +4,7 @@
 
 project_root="${ATM_PROJECT_ROOT:?}"
 working_dir="${ATM_WORKING_DIR:-"$project_root/root"}"
+provision_dir="${ATM_PROVISION_DIR:-"$project_root/provision"}"
 
 t () {
     tofu -chdir="$working_dir" "$@"

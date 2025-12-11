@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+#
+# Usage:
+#   install-nixos [-n node]
+#
+# Options:
+#
+#   -n node  A non-negative integer, typically 0-3 inclusive, defaults to 0
+#
+# Examples:
+#
+#   install-nixos
+#   install-nixos -n 1
+#
+
+set -euo pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source "$script_dir/lib.sh"
+
+# OPTIONS
+
+node=0
+
+while getopts ":n:" opt; do
+  case "$opt" in
+    n)
+      node="$OPTARG"
+      ;;
+    :)
+      fail "Option -%s requires an argument" "$OPTARG"
+      ;;
+    \?)
+      fail "Invalid option: -%s" "$OPTARG"
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+# MAIN
+
+user="azureuser"
+public_key="$(get_public_key "$node")"
+private_key="$(get_private_key "$node")"
+host="$(get_host "$node")"
+
+# Install NixOS
+
+## Step 1: Save the private key
+identity_file="$(mktemp)"
+chmod 600 "$identity_file"
+echo "$private_key" > "$identity_file"
+
+## Step 2: Set the public key
+sed -i "s|\(publicKey = \"\)[^\"]*\"|\1$public_key\"|" "$provision_dir/configuration.nix"
+
+## Step 3: Install
+nix run github:nix-community/nixos-anywhere -- \
+  -i "$identity_file" \
+  --generate-hardware-config nixos-generate-config "$provision_dir/hardware-config.nix" \
+  --flake "$provision_dir#vm" \
+  --target-host "$user@$host"
+
+## Step 4: Clean up
+sed -i "s|\(publicKey = \"\)[^\"]*\"|\1PUBLIC KEY\"|" "$provision_dir/configuration.nix"
+rm -f "$identity_file"
+
+# Save the hardware config
+
+hardware_config_dir="$provision_dir/hardware-config.nix.d"
+prefix="$(t workspace show)-$node"
+
+mkdir -p "$hardware_config_dir"
+cp "$provision_dir/hardware-config.nix" "$hardware_config_dir/${prefix}.nix"
+
+# Restore the default hardware config
+
+cp "$provision_dir/default-hardware-config.nix" "$provision_dir/hardware-config.nix"
