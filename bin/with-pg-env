@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#
+# Usage: with-pg-env pg-command
+#
+# Set up environment variables needed to connect to the PostgreSQL database
+# and run the given command in that environment.
+#
+# It makes use of the output from the db module. See db/outputs.tf for more.
+#
+# Examples:
+#
+#   with-pg-env psql
+#
+
+set -euo pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source "$script_dir/lib.sh"
+
+export PGHOST="${PGHOST:-$(t output -raw db_host)}"
+export PGUSER="${PGUSER:-$(t output -raw db_user)}"
+export PGPORT="${PGPORT:-5432}"
+export PGDATABASE="${PGDATABASE:-$(t output -raw db_name)}"
+export PGPASSWORD="${PGPASSWORD:-$(t output -raw db_password)}"
+
+exec "$@"
