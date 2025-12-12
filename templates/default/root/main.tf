@@ -9,6 +9,7 @@ locals {
 
   prefix   = "${var.name}-${local.group}-${local.environment}"
   location = local.group_to_location[local.group]
+  is_test  = local.environment == "test"
   is_prod  = local.environment == "prod"
   num_vms  = local.is_prod ? 4 : 1
 }
@@ -46,6 +47,8 @@ module "db" {
 
   admin_username = var.db_admin_username
   db_name        = var.db_name
+
+  db_prevent_destroy = !is_test
 
   firewall_rules = var.firewall_rules
 

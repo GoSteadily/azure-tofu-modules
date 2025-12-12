@@ -24,7 +24,7 @@ resource "azurerm_postgresql_flexible_server_database" "this" {
   # Prevent the possibility of accidental data loss.
   #
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = var.db_prevent_destroy
   }
 }
 

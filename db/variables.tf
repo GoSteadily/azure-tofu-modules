@@ -43,6 +43,12 @@ variable "backup_retention_days" {
   default     = 7
 }
 
+variable "db_prevent_destroy" {
+  description = "Prevent the database server from being accidentally destroyed."
+  type        = bool
+  default     = true
+}
+
 variable "firewall_rules" {
   description = "The IP addresses that are allowed to connect to the database server."
   type = map(object({
