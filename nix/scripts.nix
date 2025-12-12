@@ -1,6 +1,6 @@
 { lib, makeWrapper, stdenv
 
-, jq, opentofu
+, jq, opentofu, postgresql_16
 
 , withPrefix ? "atm"
 }:
@@ -33,6 +33,7 @@ stdenv.mkDerivation {
     install -m755 install-nixos "$out/bin/unwrapped-install-nixos"
     install -m755 login "$out/bin/unwrapped-login"
     install -m755 recreate-vm "$out/bin/unwrapped-recreate-vm"
+    install -m755 restore-db "$out/bin/unwrapped-restore-db"
     install -m755 save-keys "$out/bin/unwrapped-save-keys"
     install -m755 with-pg-env "$out/bin/unwrapped-with-pg-env"
 
@@ -44,6 +45,9 @@ stdenv.mkDerivation {
 
     makeWrapper "$out/bin/unwrapped-recreate-vm" "$out/bin/${prefix "recreate-vm"}" \
       --prefix PATH : ${lib.makeBinPath commonPackages}
+
+    makeWrapper "$out/bin/unwrapped-restore-db" "$out/bin/${prefix "restore-db"}" \
+      --prefix PATH : ${lib.makeBinPath (commonPackages ++ [ postgresql_16 ])}
 
     makeWrapper "$out/bin/unwrapped-save-keys" "$out/bin/${prefix "save-keys"}" \
       --prefix PATH : ${lib.makeBinPath commonPackages}

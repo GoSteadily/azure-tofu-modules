@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# Usage: restore-db sql_file
+#
+
+set -euo pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source "$script_dir/lib.sh"
+
+sql_file="${1:?}"
+db_name="$(t output -raw db_name)"
+
+psql -X --set ON_ERROR_STOP=on --single-transaction "$db_name" < "$sql_file"
