@@ -20,7 +20,7 @@ nix develop
 
 ts init
 ts plan
-ts apply -auto-approve
+ts apply
 ```
 
 - Open `root/terraform.tfvars` and set the variables you see there.
@@ -31,11 +31,11 @@ t init
 
 t workspace new test-staging
 t plan
-t apply -auto-approve
+t apply
 
 t workspace new test-prod
 t plan
-t apply -auto-approve
+t apply
 ```
 
 ## FAQ
