@@ -15,6 +15,9 @@
 
           shellHook = ''
             export PS1="($name)\n$PS1"
+
+            alias t=tofu
+            alias f='tofu fmt -recursive'
           '';
         };
 
