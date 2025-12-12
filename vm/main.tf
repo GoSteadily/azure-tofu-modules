@@ -45,7 +45,7 @@ resource "azurerm_linux_virtual_machine" "this" {
   }
 
   os_disk {
-    storage_account_type = "Premium_LRS"
+    storage_account_type = var.os_disk_storage_account_type
     caching              = "ReadWrite"
   }
 
