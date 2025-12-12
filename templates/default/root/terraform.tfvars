@@ -12,6 +12,9 @@ db_admin_username = ""
 
 db_name = ""
 
+#
+# Try `curl ifconfig.me` to get your public IP address.
+#
 firewall_rules = {
   example = {
     start_ip_address = ""

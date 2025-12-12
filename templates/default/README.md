@@ -24,12 +24,7 @@ ts apply -auto-approve
 ```
 
 - Open `root/terraform.tfvars` and set the variables you see there.
-
-```bash
-ts output
-```
-
-- Open `root/providers.tf` and use the output from the above command to set the missing values.
+- Open `root/providers.tf` and use the `resource_group_name` and `storage_account_name` that was output from the last `ts apply` command to set the missing values.
 
 ```bash
 t init
