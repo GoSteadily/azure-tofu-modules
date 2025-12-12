@@ -19,14 +19,14 @@ A default template is provided to get you started quickly. To use it, do the fol
 ```bash
 mkdir project && cd project
 
-nix flake init --template git+ssh://git@github.com/GoSteadily/azure-tofu-modules?ref=add-bash-scripts#default
+nix flake init --template git+ssh://git@github.com/GoSteadily/azure-tofu-modules
 
 git init
 git add .
 git commit -m "Initial commit"
 ```
 
-Finally, please read the [README](./templates/default) and follow the instructions to finish setting up.
+Finally, please read the [README](./templates/default#readme) and follow the instructions to finish setting up.
 
 ## Documentation
 

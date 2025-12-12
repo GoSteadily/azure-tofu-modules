@@ -5,5 +5,4 @@
 *.backup
 *.key
 
-.bashrc
 .envrc
