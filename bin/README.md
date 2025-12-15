@@ -10,12 +10,12 @@ Useful utilities for managing the infrastructure.
 
 ## Utilities
 
-- [`install-nixos`](./bin/install-nixos) - Install NixOS, using [nixos-anywhere](https://github.com/nix-community/nixos-anywhere), on one or more virtual machines.
-- [`login`](./bin/login) - Login via SSH to a given virtual machine.
-- [`recreate-vm`](./bin/recreate-vm) - Destroy and recreate a given virtual machine.
-- [`restore-db`](./bin/restore-db) - Restore a database from a backup.
-- [`save-keys node`](./bin/save-keys) - Save the public and private keys of a given node to separate files.
-- [`with-pg-env pg-command`](./bin/with-pg-env) - Run a PostgreSQL command within the proper database context.
+- [`install-nixos`](./install-nixos) - Install NixOS, using [nixos-anywhere](https://github.com/nix-community/nixos-anywhere), on one or more virtual machines.
+- [`login`](./login) - Login via SSH to a given virtual machine.
+- [`recreate-vm`](./recreate-vm) - Destroy and recreate a given virtual machine.
+- [`restore-db`](./restore-db) - Restore a database from a backup.
+- [`save-keys node`](./save-keys) - Save the public and private keys of a given node to separate files.
+- [`with-pg-env pg-command`](./with-pg-env) - Run a PostgreSQL command within the proper database context.
 
 ## Usage
 
