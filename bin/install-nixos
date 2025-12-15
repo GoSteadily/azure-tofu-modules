@@ -75,3 +75,5 @@ perform_install () {
 
   cp "$provision_dir/default-hardware-config.nix" "$provision_dir/hardware-config.nix"
 }
+
+main
