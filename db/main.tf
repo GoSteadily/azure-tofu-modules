@@ -65,6 +65,10 @@ check "pgbouncer_availability_check" {
 }
 
 locals {
+  pgbouncer = {
+    "pgbouncer.enabled" = true
+  }
+
   default_pgbouncer_config = {
     "metrics.pgbouncer_diagnostics" = "on"
 
@@ -74,10 +78,23 @@ locals {
     "pgbouncer.default_pool_size" = "45"
   }
 
-  pgbouncer_config = var.use_pgbouncer ? merge(local.default_pgbouncer_config, var.extra_pgbouncer_config, { "pgbouncer.enabled" = true }) : {}
+  pgbouncer_config = var.use_pgbouncer ? merge(local.default_pgbouncer_config, var.extra_pgbouncer_config) : {}
 }
 
 resource "azurerm_postgresql_flexible_server_configuration" "pgbouncer" {
+  for_each = var.use_pgbouncer ? local.pgbouncer : {}
+  name     = each.key
+  value    = each.value
+
+  server_id = azurerm_postgresql_flexible_server.this.id
+}
+
+resource "azurerm_postgresql_flexible_server_configuration" "pgbouncer_config" {
+  #
+  # pgbouncer.enabled must be set to true before we can set any of the PgBouncer configurations
+  #
+  depends_on = [azurerm_postgresql_flexible_server_configuration.pgbouncer]
+
   for_each = local.pgbouncer_config
   name     = each.key
   value    = each.value
