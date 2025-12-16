@@ -21,38 +21,36 @@
           '';
         };
 
-        #
-        # The project development environment
-        #
-        # It is used as the default development environment by the default template.
-        #
-        # You can use overrideAttrs to tweak it to your liking.
-        #
-        # For e.g.
-        #
-        # devShells.${system}.project.overrideAttrs { name = "..."; }
-        #
-        # or
-        #
-        # devShells.${system}.project.overrideAttrs(old: {
-        #   nativeBuildInputs = old.nativeBuildInputs ++ [ ... ];
-        #   shellHook = old.shellHook + ''
-        #   '';
-        # })
-        #
-        # Learn how to use overrideAttrs here: https://nixos.org/manual/nixpkgs/stable/#sec-pkg-overrideAttrs.
-        #
-        # N.B.: packages end up as nativeBuildInputs. See https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/mkshell/default.nix#L49.
-        #
-        devShells.project = pkgs.mkShell {
+        packages = {
+          inherit scripts;
+          default = scripts;
+        };
+      })
+    ) // {
+      #
+      # Used to make the default development environment in the default template.
+      #
+      lib.mkShell =
+        { pkgs
+
+        , packages ? []
+        , postgresqlPackage ? pkgs.postgresql_16
+        , shellHook ? ""
+
+        , ...
+        }@args:
+        let
+          otherArgs = removeAttrs args [ "pkgs" "packages" "postgresqlPackage" "shellHook" ];
+        in
+        pkgs.mkShell ({
           packages = [
+            pkgs.atm-scripts
             pkgs.azure-cli
             pkgs.ipcalc
             pkgs.jq
             pkgs.opentofu
-            pkgs.postgresql_16
-            scripts
-          ];
+            postgresqlPackage
+          ] ++ packages;
 
           shellHook = ''
             export PROJECT_ROOT="$PWD"
@@ -74,12 +72,15 @@
             if [ -f "$PROJECT_ROOT/.bashrc" ]; then
               . "$PROJECT_ROOT/.bashrc"
             fi
-          '';
-        };
 
-        packages.default = scripts;
-      })
-    ) // {
+            ${shellHook}
+          '';
+        } // otherArgs);
+
+      overlays.default = final: prev: {
+        atm-scripts = prev.callPackage ./nix/scripts.nix {};
+      };
+
       templates = {
         default = {
           description = "A template for getting started on a new Azure-based project.";

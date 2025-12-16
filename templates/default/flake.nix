@@ -10,10 +10,19 @@
   outputs = { self, nixpkgs, flake-utils, azure-tofu-modules }:
     flake-utils.lib.eachDefaultSystem(system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [
+            azure-tofu-modules.overlays.default
+          ];
+        };
       in
       {
-        devShells.default = azure-tofu-modules.devShells.${system}.project;
+        devShells.default = azure-tofu-modules.lib.mkShell {
+          inherit pkgs;
+
+          name = "project";
+        };
       }
     );
 }

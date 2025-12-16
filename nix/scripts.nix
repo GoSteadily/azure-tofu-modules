@@ -2,6 +2,7 @@
 
 , jq, opentofu, postgresql_16
 
+, postgresqlPackage ? postgresql_16
 , withPrefix ? "atm"
 }:
 
@@ -47,7 +48,7 @@ stdenv.mkDerivation {
       --prefix PATH : ${lib.makeBinPath commonPackages}
 
     makeWrapper "$out/bin/unwrapped-restore-db" "$out/bin/${prefix "restore-db"}" \
-      --prefix PATH : ${lib.makeBinPath (commonPackages ++ [ postgresql_16 ])}
+      --prefix PATH : ${lib.makeBinPath (commonPackages ++ [ postgresqlPackage ])}
 
     makeWrapper "$out/bin/unwrapped-save-keys" "$out/bin/${prefix "save-keys"}" \
       --prefix PATH : ${lib.makeBinPath commonPackages}
