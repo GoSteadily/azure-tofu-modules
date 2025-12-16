@@ -52,18 +52,21 @@
 
             export ATM_PROJECT_ROOT="$PROJECT_ROOT"
 
+            t () {
+              tofu -chdir="$PROJECT_ROOT/root" "$@"
+            }
+
+            ts () {
+              tofu -chdir="$PROJECT_ROOT/storage" "$@"
+            }
+
+            export -f t ts
+
             #
-            # Put secrets in here
+            # You can put secrets in here
             #
             if [ -f "$PROJECT_ROOT/.envrc" ]; then
               . "$PROJECT_ROOT/.envrc"
-            fi
-
-            #
-            # Anything else can go in here
-            #
-            if [ -f "$PROJECT_ROOT/.bashrc" ]; then
-              . "$PROJECT_ROOT/.bashrc"
             fi
 
             ${shellHookSuffix}
