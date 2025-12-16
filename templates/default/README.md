@@ -40,6 +40,25 @@ t apply
 
 ## FAQ
 
+### How to override `atm-scripts`?
+
+Here's an example that shows how to override the version of PostgreSQL that's used.
+
+```nix
+pkgs = import nixpkgs {
+  inherit system;
+  overlays = [
+    azure-tofu-modules.overlays.default
+    (final: prev: {
+      atm-scripts = prev.atm-scripts.override { postgresqlPackage = final.postgresql_14; };
+    })
+  ];
+};
+```
+
+- [Overlays](https://nixos.org/manual/nixpkgs/stable/#chap-overlays)
+- [Overriding](https://nixos.org/manual/nixpkgs/stable/#chap-overrides)
+
 ### How to resolve errors for SKU not available?
 
 - [Resolve errors for SKU not available](https://learn.microsoft.com/en-us/azure/azure-resource-manager/troubleshooting/error-sku-not-available?tabs=azure-cli)
