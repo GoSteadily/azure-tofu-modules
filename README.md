@@ -7,12 +7,11 @@
 A default template is provided to get you started quickly. To use it, do the following:
 
 ```bash
-mkdir project
+git init project
 cd project
 
 nix flake init --template git+ssh://git@github.com/GoSteadily/azure-tofu-modules
 
-git init
 git add .
 git commit -m "Initial commit"
 ```

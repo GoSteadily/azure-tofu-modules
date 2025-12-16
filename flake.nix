@@ -3,7 +3,6 @@
     (flake-utils.lib.eachDefaultSystem(system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        scripts = pkgs.callPackage ./nix/scripts.nix {};
       in
       {
         devShells.default = pkgs.mkShell {
@@ -20,11 +19,6 @@
             alias f='tofu fmt -recursive'
           '';
         };
-
-        packages = {
-          inherit scripts;
-          default = scripts;
-        };
       })
     ) // {
       #
@@ -33,13 +27,13 @@
       lib.mkShell =
         { pkgs
 
-        , packages ? []
-        , shellHook ? ""
+        , extraPackages ? []
+        , shellHookSuffix ? ""
 
         , ...
         }@args:
         let
-          otherArgs = removeAttrs args [ "pkgs" "packages" "shellHook" ];
+          otherArgs = removeAttrs args [ "pkgs" "extraPackages" "shellHookSuffix" ];
         in
         pkgs.mkShell ({
           packages = [
@@ -49,7 +43,7 @@
             pkgs.ipcalc
             pkgs.jq
             pkgs.opentofu
-          ] ++ packages;
+          ] ++ extraPackages;
 
           shellHook = ''
             export PROJECT_ROOT="$PWD"
@@ -72,11 +66,11 @@
               . "$PROJECT_ROOT/.bashrc"
             fi
 
-            ${shellHook}
+            ${shellHookSuffix}
           '';
         } // otherArgs);
 
-      overlays.default = final: prev: {
+      overlays.default = _: prev: {
         atm-scripts = prev.callPackage ./nix/scripts.nix {};
       };
 
