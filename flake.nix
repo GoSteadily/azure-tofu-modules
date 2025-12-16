@@ -34,22 +34,21 @@
         { pkgs
 
         , packages ? []
-        , postgresqlPackage ? pkgs.postgresql_16
         , shellHook ? ""
 
         , ...
         }@args:
         let
-          otherArgs = removeAttrs args [ "pkgs" "packages" "postgresqlPackage" "shellHook" ];
+          otherArgs = removeAttrs args [ "pkgs" "packages" "shellHook" ];
         in
         pkgs.mkShell ({
           packages = [
             pkgs.atm-scripts
+            pkgs.atm-scripts.postgresql
             pkgs.azure-cli
             pkgs.ipcalc
             pkgs.jq
             pkgs.opentofu
-            postgresqlPackage
           ] ++ packages;
 
           shellHook = ''

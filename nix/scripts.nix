@@ -56,4 +56,8 @@ stdenv.mkDerivation {
     makeWrapper "$out/bin/unwrapped-with-pg-env" "$out/bin/${prefix "with-pg-env"}" \
       --prefix PATH : ${lib.makeBinPath commonPackages}
   '';
+
+  passthru = {
+    postgresql = postgresqlPackage;
+  };
 }
