@@ -50,7 +50,7 @@ pkgs = import nixpkgs {
   overlays = [
     azure-tofu-modules.overlays.default
     (final: prev: {
-      atm-scripts = prev.atm-scripts.override { postgresqlPackage = final.postgresql_14; };
+      atm-scripts = prev.atm-scripts.override { postgresqlPackage = final.postgresql_17; };
     })
   ];
 };
