@@ -18,7 +18,7 @@ terraform {
 
   backend "azurerm" {
     #
-    # You can get the missing values from `tofu -chdir=storage output`.
+    # You can get the missing values from `ts output`.
     #
     resource_group_name  = ""
     storage_account_name = ""
