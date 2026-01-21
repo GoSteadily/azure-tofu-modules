@@ -17,6 +17,23 @@ module "db" {
 
 See the [optional inputs](./variables.tf) to override their defaults.
 
+### Extensions
+
+To allow various extensions you can do the following:
+
+```tf
+module "db" {
+  # ...
+
+  extensions = "CUBE,CITEXT,BTREE_GIST"
+
+  # ...
+}
+```
+
+- [Allow extensions](https://learn.microsoft.com/en-us/azure/postgresql/extensions/how-to-allow-extensions)
+- [Considerations with the use of extensions and modules](https://learn.microsoft.com/en-us/azure/postgresql/extensions/concepts-extensions-considerations)
+
 ### Firewall rules
 
 To set the firewall rules you can do the following:
@@ -71,5 +88,6 @@ module.db.name
 ## Documentation
 
 - [`azurerm_postgresql_flexible_server`](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server)
+- [`azurerm_postgresql_flexible_server_configuration`](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server_configuration)
 - [`azurerm_postgresql_flexible_server_database`](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server_database)
 - [What is Azure Database for PostgreSQL?](https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/overview)

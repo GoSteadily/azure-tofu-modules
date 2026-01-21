@@ -80,6 +80,11 @@ variable "burstable_sku_name" {
   default     = "B_Standard_B1ms"
 }
 
+variable "extensions" {
+  description = "The extensions to be enabled on the database."
+  type        = string
+  default     = ""
+}
 
 #
 # PgBouncer

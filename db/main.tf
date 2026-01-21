@@ -17,6 +17,12 @@ resource "azurerm_postgresql_flexible_server" "this" {
   zone                  = var.allow_azure_to_choose_zone ? null : var.zone
 }
 
+resource "azurerm_postgresql_flexible_server_configuration" "extensions" {
+  name      = "azure.extensions"
+  server_id = azurerm_postgresql_flexible_server.this.id
+  value     = var.extensions
+}
+
 resource "azurerm_postgresql_flexible_server_database" "this" {
   name      = var.db_name
   server_id = azurerm_postgresql_flexible_server.this.id
